@@ -9,6 +9,7 @@ verify_ssl = true
 django = "*"
 django-environ = "*"
 pillow = "*"
+social-auth-app-django = "*"
 
 [requires]
 python_version = "3.8"
