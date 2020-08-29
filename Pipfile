@@ -11,6 +11,7 @@ django-environ = "*"
 pillow = "*"
 social-auth-app-django = "*"
 sorl-thumbnail = "*"
+redis = "*"
 
 [requires]
 python_version = "3.8"
