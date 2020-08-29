@@ -1,16 +1,16 @@
-from django.contrib import messages
-from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-
-from actions.models import Action
-from common.decorator import ajax_required
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import Profile
+from django.contrib import messages
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from common.decorators import ajax_required
 from .models import Contact
+
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+from .models import Profile
 from actions.utils import create_action
+from actions.models import Action
 
 
 @login_required
@@ -41,6 +41,7 @@ def register(request):
                 user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
+            # Create the user profile
             Profile.objects.create(user=new_user)
             create_action(new_user, 'has created an account')
             return render(request,
@@ -97,24 +98,24 @@ def user_detail(request, username):
 
 
 @ajax_required
-@require_POST
 @login_required
+@require_POST
 def user_follow(request):
     user_id = request.POST.get('id')
-    print(user_id)
     action = request.POST.get('action')
     if user_id and action:
         try:
             user = User.objects.get(id=user_id)
             if action == 'follow':
+                print('Oh eu aqui')
                 Contact.objects.get_or_create(
                     user_from=request.user,
                     user_to=user)
-                create_action(request.user, 'is following', user)
             else:
                 Contact.objects.filter(user_from=request.user,
                                        user_to=user).delete()
-            return JsonResponse({'status': 'ok'})
+                create_action(request.user, 'is following', user)
+            return JsonResponse({'status':'ok'})
         except User.DoesNotExist:
-            return JsonResponse({'status': 'ko'})
-    return JsonResponse({'status': 'ko'})
+            return JsonResponse({'status':'ko'})
+    return JsonResponse({'status':'ko'})

@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
@@ -31,6 +31,7 @@ class Contact(models.Model):
         return f'{self.user_from} follows {self.user_to}'
 
 
+# Add following field to User dynamically
 User.add_to_class(
     'following',
     models.ManyToManyField('self',

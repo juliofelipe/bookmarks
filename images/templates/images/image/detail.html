@@ -4,16 +4,14 @@
 
 {% block content %}
   <h1>{{ image.title }}</h1>
-
-   {% load thumbnail %}
+  {% load thumbnail %}
   {% thumbnail image.image "300" as im %}
     <a href="{{ image.image.url }}">
       <img src="{{ im.url }}" class="image-detail">
     </a>
   {% endthumbnail %}
-
    {% with total_likes=image.users_like.count users_like=image.users_like.all %}
-   <div class="image-info">
+     <div class="image-info">
       <div>
         <span class="count">
           <span class="total">{{ total_likes }}</span>
@@ -29,12 +27,11 @@
       </div>
       {{ image.description|linebreaks }}
     </div>
-
     <div class="image-likes">
       {% for user in image.users_like.all %}
         <div>
           <img src="{{ user.profile.photo.url }}">
-          <p>Julio</p>
+          <p>Helena</p>
         </div>
       {% empty %}
         Nobody likes this image yet.
@@ -42,7 +39,6 @@
     </div>
   {% endwith %}
 {% endblock %}
-
 {% block domready %}
   $('a.like').click(function(e){
     e.preventDefault();

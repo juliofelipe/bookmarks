@@ -1,7 +1,6 @@
 import environ
 from pathlib import Path
 import os
-
 from django.urls import reverse_lazy
 
 env = environ.Env()
@@ -18,7 +17,10 @@ DEBUG = env.bool('DEBUG', default=False)
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 
-ALLOWED_HOSTS = ['*', 'c91d90c6bc5b.ngrok.io']
+ALLOWED_HOSTS = [
+    '*',
+    '650c160c7e0e.ngrok.io'
+]
 
 
 # Application definition
@@ -35,7 +37,6 @@ INSTALLED_APPS = [
     'images.apps.ImagesConfig',
     'sorl.thumbnail',
     'actions.apps.ActionsConfig',
-
 ]
 
 MIDDLEWARE = [
@@ -128,7 +129,6 @@ LOGOUT_URL = 'logout'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'account.authentication.EmailAuthBackend',
@@ -139,10 +139,8 @@ AUTHENTICATION_BACKENDS = [
 
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
-SOCIAL_AUTH_FACEBOOK_KEY = 'XXX' # Facebook App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = 'XXX' # Facebook App Secret
-
-
+SOCIAL_AUTH_FACEBOOK_KEY = env('SOCIAL_AUTH_FACEBOOK_KEY') # Facebook App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = env('SOCIAL_AUTH_FACEBOOK_SECRET') # Facebook App Secret
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 SOCIAL_AUTH_TWITTER_KEY = 'XXX' # Twitter Consumer Key

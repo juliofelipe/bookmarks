@@ -1,16 +1,14 @@
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.decorators.http import require_POST
-from django.http import HttpResponse
-from django.core.paginator import Paginator, EmptyPage, \
-    PageNotAnInteger
-
-from common.decorator import ajax_required
 from .forms import ImageCreateForm
-from .models import Image
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.http import require_POST
+from common.decorators import ajax_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from actions.utils import create_action
+
+from .models import Image
 
 
 @login_required
@@ -25,7 +23,6 @@ def image_create(request):
 
             # assign current user to the item
             new_item.user = request.user
-            new_item.save()
             new_item.save()
             create_action(request.user, 'bookmarked image', new_item)
             messages.success(request, 'Image added successfully')
@@ -49,6 +46,7 @@ def image_detail(request, id, slug):
                   {'section': 'images',
                    'image': image})
 
+
 @ajax_required
 @login_required
 @require_POST
@@ -69,10 +67,10 @@ def image_like(request):
     return JsonResponse({'status':'ko'})
 
 
-
 @login_required
 def image_list(request):
     images = Image.objects.all()
+    # images_by_popularity = Image.objects.order_by('-total_likes')
     paginator = Paginator(images, 8)
     page = request.GET.get('page')
     try:
@@ -93,4 +91,4 @@ def image_list(request):
                       {'section': 'images', 'images': images})
     return render(request,
                   'images/image/list.html',
-                  {'section': 'images', 'images': images})
+                   {'section': 'images', 'images': images})
